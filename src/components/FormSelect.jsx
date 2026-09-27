@@ -1,6 +1,6 @@
 import React from 'react'
 
-const FormSelect = ({ label, name, list, size }) => {
+const FormSelect = ({ label, name, list, size, defaultValue }) => {
   return (
     <fieldset className="fieldset">
       <legend className="fieldset-legend text-base capitalize">{label}</legend>
@@ -8,6 +8,7 @@ const FormSelect = ({ label, name, list, size }) => {
         name={name}
         id={name}
         className={`select select-bordered ${size}`}
+        defaultValue={defaultValue}
       >
         {list.map((item) => (
           <option key={item} value={item}>

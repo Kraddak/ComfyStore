@@ -11,13 +11,13 @@ export { default as Register } from './Register'
 export { default as Products } from './Products'
 
 export const Pages = {
-  About: 'about',
-  Cart: 'cart',
-  Checkout: 'checkout',
+  About: '/about',
+  Cart: '/cart',
+  Checkout: '/checkout',
   Error: 'error',
   HomeLayout: '/',
   Login: '/login',
-  Orders: 'orders',
+  Orders: '/orders',
   SingleProduct: 'products/:id',
   Register: '/register',
   Products: '/products',

@@ -5,11 +5,22 @@ import { formatPrice, customFetch } from '../utils'
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import { Pages } from '.'
+import { addItem } from '../features/cart/cartSlice'
+import { useDispatch } from 'react-redux'
 
-export const loader = async ({ params }) => {
-  const response = await customFetch(`/products/${params.id}`)
-  return { product: response.data.data }
-}
+const singleProductQuery = (id) => ({
+  queryKey: ['single', id],
+  queryFn: () => customFetch(`/products/${id}`),
+})
+
+export const loader =
+  (queryClient) =>
+  async ({ params }) => {
+    const response = await queryClient.ensureQueryData(
+      singleProductQuery(params.id),
+    )
+    return { product: response.data.data }
+  }
 
 const amounts = [1, 2, 3, 4, 5, 6, 7, 8]
 
@@ -22,6 +33,22 @@ const SingleProduct = () => {
 
   const [productColor, setProductColor] = useState(colors[0])
   const [amount, setAmount] = useState(1)
+
+  // Redux
+  const cartProduct = {
+    cartId: product.id + productColor,
+    productID: product.id,
+    image,
+    title,
+    price,
+    company,
+    productColor,
+    amount,
+  }
+  const dispatch = useDispatch()
+  const addToCart = () => {
+    dispatch(addItem({ product: cartProduct }))
+  }
 
   return (
     <section>
@@ -88,16 +115,15 @@ const SingleProduct = () => {
               onChange={(e) => setAmount(parseInt(e.target.value))}
             >
               {amounts.map((a) => (
-                <option value={a}>{a}</option>
+                <option key={a} value={a}>
+                  {a}
+                </option>
               ))}
             </select>
           </div>
           {/* CART BUTTON */}
           <div className="mt-10 ">
-            <button
-              className="btn btn-secondary btn-md"
-              onClick={() => console.log('add to bag')}
-            >
+            <button className="btn btn-secondary btn-md" onClick={addToCart}>
               Add to bag
             </button>
           </div>
